@@ -4,14 +4,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gomining.test.dto.StudentCreateDto;
+import gomining.test.dto.StudentResponseDto;
 import gomining.test.dto.mapper.StudentMapper;
+import gomining.test.entity.Grade;
 import gomining.test.entity.Student;
 import gomining.test.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+
+@Tag(name = "Students", description = "Here you can CRUD a student and get activity details from student")
 @AllArgsConstructor
 @RestController
 @CrossOrigin("*")
@@ -30,86 +43,67 @@ public class StudentController {
 
     private final StudentService studentService;
 
-   
     @GetMapping("{id}")
-    public  ResponseEntity<?>  getStudent(@PathVariable("id") String id) {
-        try{
-            return ResponseEntity.ok(this.studentService.getOne(id));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }    
+    public  ResponseEntity<StudentResponseDto> getStudent(@PathVariable("id") String id) {
+ 
+            Student student = this.studentService.getOne(id);
+            return ResponseEntity.status(HttpStatus.OK).body(StudentMapper.toDto(student));
+ 
     }
-    @GetMapping
+    @GetMapping("/pageable")
     public ResponseEntity<?> getAllStudents(Pageable pageable) {
         //http://localhost:8080/student?page=0&size=2
-        try{
-            return ResponseEntity.ok(this.studentService.getAll(pageable));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+            return ResponseEntity.ok(this.studentService.getAllPageable(pageable));
+ 
     }
+    @GetMapping
+    public ResponseEntity<List<StudentResponseDto>> getAllStudents() {
+            List<Student> students = this.studentService.getAll();
+            return ResponseEntity.ok().body(StudentMapper.toListDto(students));
+
+    }
+
     @PostMapping
-    public ResponseEntity<?> createStudent(@RequestBody StudentCreateDto studentCreateDto) {
-        try{
-            return ResponseEntity.ok(this.studentService.createStudent(StudentMapper.toStudent(studentCreateDto)));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        
+    public ResponseEntity<StudentResponseDto> createStudent(@Valid @RequestBody StudentCreateDto studentCreateDto) {
+
+            Student student = this.studentService.createStudent(StudentMapper.toStudent(studentCreateDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(StudentMapper.toDto(student));
       
     }
     @PutMapping
-    public ResponseEntity<?> updateStudent(@RequestBody Student student) {
-        try{
-            return ResponseEntity.ok(this.studentService.update(student));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Student> updateStudent(@Valid @RequestBody Student student) {
+   
+            return ResponseEntity.status(HttpStatus.OK).body(this.studentService.update(student));
+   
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteStudent(@PathVariable("id") String id) {
-        try{
-            return ResponseEntity.ok(this.studentService.deleteById(id));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Boolean> deleteStudent(@PathVariable("id") String id) {
+   
+            return ResponseEntity.status(HttpStatus.OK).body(this.studentService.deleteById(id));
+
     }
     @GetMapping("/getStudentAvgByAllActivity/{id}")
-    public ResponseEntity<?> getStudentAvgByAllActivity(@PathVariable("id") String id) {
-        try{
+    public ResponseEntity<Double> getStudentAvgByAllActivity(@PathVariable("id") String id) {
             return ResponseEntity.ok(this.studentService.getStudentAvgByAllActivity(id));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }  
+
     }
     @GetMapping("/getAllStudentsAvgByActivity/{id}")
-    public ResponseEntity<?> getAllStudentsAvgByActivity(@PathVariable("id") String id) {
-        try{
+    public ResponseEntity<Double> getAllStudentsAvgByActivity(@PathVariable("id") String id) {
+
             return ResponseEntity.ok(this.studentService.calculateAverageGradeForActivity(id));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }  
+
     }
     @GetMapping("/grades")
-    public ResponseEntity<?> grades(
+    public ResponseEntity<List<Grade>> grades(
             @RequestParam(required = false) String cpf,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String number){
 
-       try{
+ 
             return ResponseEntity.ok(studentService.findGradesByCpfOrEmailOrNumber(cpf, email, number));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }  
+
     }    
     
 }

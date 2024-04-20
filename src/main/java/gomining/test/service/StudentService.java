@@ -19,7 +19,8 @@ import gomining.test.entity.ActivityGrade;
 import gomining.test.entity.AverageResult;
 import gomining.test.entity.Grade;
 import gomining.test.entity.Student;
-import gomining.test.exception.PersonalizedException;
+import gomining.test.exception.EntityNotFoundException;
+import gomining.test.exception.UniqueViolationException;
 import gomining.test.repository.ActivityRepository;
 import gomining.test.repository.StudentRepository;
 
@@ -36,9 +37,16 @@ public class StudentService {
 
     @Transactional
     public Student createStudent(Student student) { //Metodo deve criar um estudante apenas com o email e outros dados sem as atividades, criar obj personalizado
-        studentRepository.findStudentByEmail(student.getEmail()).orElseThrow(()-> new  PersonalizedException("Email already exists"));
-        studentRepository.findStudentByCpf(student.getCpf()).orElseThrow(()-> new  PersonalizedException("Cpf already exists"));
-        studentRepository.findStudentByNumber(student.getNumber()).orElseThrow(()-> new  PersonalizedException("Number already exists"));
+      
+        if(studentRepository.findStudentByEmail(student.getEmail()).isPresent()){
+           throw new  UniqueViolationException(String.format("{%s} already exists", student.getEmail()));
+        }
+        if(studentRepository.findStudentByCpf(student.getCpf()).isPresent()){
+            throw new UniqueViolationException(String.format("{%s} already exists", student.getCpf()));
+        };
+        if(studentRepository.findStudentByNumber(student.getNumber()).isPresent()){
+            throw new  UniqueViolationException(String.format("{%s} already exists", student.getNumber() ));
+        }
             // student.setPassword(passwordEncoder.encode(student.getPassword()));
         student = studentRepository.save(student);
         return student; 
@@ -47,10 +55,10 @@ public class StudentService {
     public Student update(Student student){
         getOne(student.getId());
         // if(studentRepository.findStudentByName(student.getName()).isPresent()){
-        //     throw new  PersonalizedException("User Name already exists");
+        //     throw new  UniqueViolationException(String.format("User {%s} already exists", student.getName()));
         // }
         for(ActivityGrade activityGrade : student.getActivitiesAndGrades()){
-            activityRepository.findActivityById(activityGrade.getIdActivity()).orElseThrow(()-> new  PersonalizedException("Activity id do not exist"));
+            activityRepository.findActivityById(activityGrade.getIdActivity()).orElseThrow(()-> new  UniqueViolationException(String.format("Activity {%s} do not exist", activityGrade.getIdActivity())));
         }
         student = studentRepository.save(student);
         return student; 
@@ -58,13 +66,17 @@ public class StudentService {
 
     @Transactional(readOnly = true)
     public Student getOne(String id){
-       return studentRepository.findStudentById(id).orElseThrow(()-> new PersonalizedException("Student id do not exist"));
+       return studentRepository.findStudentById(id).orElseThrow(()-> new EntityNotFoundException(String.format("Student {%s} do not exist", id)));
     
     }
 
     @Transactional(readOnly = true)
-    public Page<Student> getAll(Pageable pageable){
+    public Page<Student> getAllPageable(Pageable pageable){
         return studentRepository.findAll(pageable);
+    }
+    @Transactional(readOnly = true)
+    public List<Student> getAll(){
+        return studentRepository.findAll();
     }
 
     public Boolean deleteById(String id){

@@ -4,3 +4,11 @@ spring:
             host: localhost
             port: 27017
             database: gomining
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /swagger-ui
+  packagesToScan: gomining.test.controller
+
+    

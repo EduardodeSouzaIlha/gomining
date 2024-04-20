@@ -2,6 +2,8 @@ package gomining.test.entity;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +19,6 @@ public class ActivityGrade {
     
     private String idActivity;
 
+    @Valid
     private List<Grade> grades;
 }

@@ -1,6 +1,8 @@
 package gomining.test.entity;
 
 
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,7 +21,9 @@ import lombok.Setter;
 public class Activity {
     @Id
     private String id;
+    @NotBlank
     private String title;
+    @NotBlank
     private String description;
     private String createdAt;
     private String modifiedAt;

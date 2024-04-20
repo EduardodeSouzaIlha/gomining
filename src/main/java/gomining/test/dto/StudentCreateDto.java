@@ -1,7 +1,7 @@
 package gomining.test.dto;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,15 +13,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentCreateDto {
-    @NotNull
+    @NotBlank
     private String name;
-    @NotNull
+    @NotBlank
     private String password;
-    @NotNull
+    @NotBlank
     private String cpf;
-    @NotNull
+    @NotBlank
     private String number;
-    @NotNull
-    @Email
+    @NotBlank
+    @Email(message = "Invalid email format")
     private String email;
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gomining.test.entity.Activity;
-import gomining.test.exception.PersonalizedException;
+import gomining.test.exception.UniqueViolationException;
 import gomining.test.repository.ActivityRepository;
 
 @Service
@@ -20,8 +20,9 @@ public class ActivityService {
     private ActivityRepository activityRepository;
 
     public Activity createActivity(Activity activity) {
-        
-        activityRepository.findStudentByTitle(activity.getTitle()).orElseThrow(()-> new  PersonalizedException("Activity title already exists"));
+        if(activityRepository.findStudentByTitle(activity.getTitle()).isPresent()){
+           throw new  UniqueViolationException(String.format("Activity {%s} already exists", activity.getTitle()));
+        };
         
         activity = activityRepository.save(activity);
         return activity; 
@@ -38,7 +39,7 @@ public class ActivityService {
     @Transactional(readOnly = true)
     public Activity getOne(String id){
 
-        return activityRepository.findActivityById(id).orElseThrow(()->new  PersonalizedException("Activity id do not exist"));
+        return activityRepository.findActivityById(id).orElseThrow(()->new  UniqueViolationException(String.format("Activity {%s} do not exist", id)));
     
     }
 

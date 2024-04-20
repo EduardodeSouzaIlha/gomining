@@ -3,11 +3,15 @@ package gomining.test.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,25 +29,28 @@ public class Student {
     
     @Id
     private String id;
-    @NotNull
+    @NotBlank
     private String name;
-    @NotNull
+    @NotBlank
     private String password;
-    @NotNull
+    @NotBlank
     private String cpf;
-    @NotNull
+    @NotBlank
     private String number;
 
-    private String role;
-    
-    @NotNull
+    @NotBlank
     @Email
     private String email;
+
+    private Role role = Role.ROLE_STUDENT;
+    
 
     //Add data criação
     private Date createdAt;
     private Date modifiedAt;
     
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Valid
     private List<ActivityGrade> activitiesAndGrades;
 
 
