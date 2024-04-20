@@ -34,7 +34,7 @@ public class AuthController {
 
     @PostMapping("/auth")
     public ResponseEntity<?> authentication(@RequestBody StudentLoginDto studentLoginDto, HttpServletRequest request){
-        System.out.println(studentLoginDto.getName());
+
         log.info("Auth", studentLoginDto.getName());
         try{
             UsernamePasswordAuthenticationToken  authenticationToken = new UsernamePasswordAuthenticationToken(studentLoginDto.getName(), studentLoginDto.getPassword());
