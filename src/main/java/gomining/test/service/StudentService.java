@@ -142,12 +142,12 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Student searchByStudentName(String name){
-        return studentRepository.findStudentByName(name).orElseThrow(()-> new EntityNotFoundException(String.format("Student {%s} do not exist", name)));
+    public Student searchByStudentEmail(String email){
+        return studentRepository.findStudentByEmail(email).orElseThrow(()-> new EntityNotFoundException(String.format("Student {%s} do not exist", email)));
     }
     @Transactional(readOnly = true)
-    public Student.Role searchRoleByStudentName(String name){
-        Student student = studentRepository.findStudentByName(name).orElseThrow(()-> new EntityNotFoundException(String.format("Student {%s} do not exist", name)));
+    public Student.Role searchRoleByStudentName(String email){
+        Student student = studentRepository.findStudentByEmail(email).orElseThrow(()-> new EntityNotFoundException(String.format("Student {%s} do not exist", email)));
         Student.Role role = student.getRole();
         return role;
     }

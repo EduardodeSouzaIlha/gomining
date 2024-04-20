@@ -35,14 +35,14 @@ public class AuthController {
     @PostMapping("/auth")
     public ResponseEntity<?> authentication(@RequestBody StudentLoginDto studentLoginDto, HttpServletRequest request){
 
-        log.info("Auth", studentLoginDto.getName());
+        log.info("Auth", studentLoginDto.getEmail());
         try{
-            UsernamePasswordAuthenticationToken  authenticationToken = new UsernamePasswordAuthenticationToken(studentLoginDto.getName(), studentLoginDto.getPassword());
+            UsernamePasswordAuthenticationToken  authenticationToken = new UsernamePasswordAuthenticationToken(studentLoginDto.getEmail(), studentLoginDto.getPassword());
             authenticationManager.authenticate(authenticationToken);
-            JwtToken token = datailsService.getTokenAuthenticated(studentLoginDto.getName());
+            JwtToken token = datailsService.getTokenAuthenticated(studentLoginDto.getEmail());
             return ResponseEntity.ok(token);
         }catch(AuthenticationException e){
-            log.warn("Bad Credentials from username '{}'", studentLoginDto.getName());
+            log.warn("Bad Credentials from username '{}'", studentLoginDto.getEmail());
 
         }
         return ResponseEntity.badRequest().body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, "Bad Credentials"));

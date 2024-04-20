@@ -11,7 +11,7 @@ public class JwtUserDatails extends User {
     private Student student;
 
     public JwtUserDatails(Student student) {
-        super(student.getName(), student.getPassword(), AuthorityUtils.createAuthorityList(student.getRole().name()));
+        super(student.getEmail(), student.getPassword(), AuthorityUtils.createAuthorityList(student.getRole().name()));
         this.student = student;
     }
 
