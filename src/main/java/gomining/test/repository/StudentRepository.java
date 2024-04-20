@@ -21,4 +21,6 @@ public interface StudentRepository extends MongoRepository<Student, String>{
     Optional<Student> findStudentByCpf(String cpf);
 
     Optional<Student> findStudentById(String id);
+
+    Optional<Student> findStudentByName(String name);
 }

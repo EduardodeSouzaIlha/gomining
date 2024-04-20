@@ -9,9 +9,6 @@ import gomining.test.dto.mapper.StudentMapper;
 import gomining.test.entity.Grade;
 import gomining.test.entity.Student;
 import gomining.test.service.StudentService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
@@ -22,7 +19,6 @@ import javax.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +38,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
 
     private final StudentService studentService;
-
+    
     @GetMapping("{id}")
     public  ResponseEntity<StudentResponseDto> getStudent(@PathVariable("id") String id) {
  

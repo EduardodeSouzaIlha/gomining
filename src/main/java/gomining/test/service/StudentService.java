@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -21,9 +22,12 @@ import gomining.test.entity.Grade;
 import gomining.test.entity.Student;
 import gomining.test.exception.EntityNotFoundException;
 import gomining.test.exception.UniqueViolationException;
+import gomining.test.jwt.JwtUtils;
 import gomining.test.repository.ActivityRepository;
 import gomining.test.repository.StudentRepository;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Service
 public class StudentService {
     @Autowired
@@ -34,6 +38,9 @@ public class StudentService {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Student createStudent(Student student) { //Metodo deve criar um estudante apenas com o email e outros dados sem as atividades, criar obj personalizado
@@ -47,7 +54,8 @@ public class StudentService {
         if(studentRepository.findStudentByNumber(student.getNumber()).isPresent()){
             throw new  UniqueViolationException(String.format("{%s} already exists", student.getNumber() ));
         }
-            // student.setPassword(passwordEncoder.encode(student.getPassword()));
+        student.setPassword(passwordEncoder.encode(student.getPassword()));
+
         student = studentRepository.save(student);
         return student; 
     }
@@ -133,5 +141,15 @@ public class StudentService {
         return results.getMappedResults();
     }
 
-
+    @Transactional(readOnly = true)
+    public Student searchByStudentName(String name){
+        return studentRepository.findStudentByName(name).orElseThrow(()-> new EntityNotFoundException(String.format("Student {%s} do not exist", name)));
+    }
+    @Transactional(readOnly = true)
+    public Student.Role searchRoleByStudentName(String name){
+        Student student = studentRepository.findStudentByName(name).orElseThrow(()-> new EntityNotFoundException(String.format("Student {%s} do not exist", name)));
+        Student.Role role = student.getRole();
+        return role;
+    }
+    
 }
