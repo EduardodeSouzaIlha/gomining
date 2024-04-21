@@ -57,4 +57,11 @@ public class Student {
         ROLE_ADMIN, ROLE_STUDENT
     }
 
+    public Student( String name, String password, String cpf, String number, String email){
+        this.name = name;
+        this.password = password;
+        this.cpf = cpf;
+        this.number = number;
+        this.email = email;
+    }
 }

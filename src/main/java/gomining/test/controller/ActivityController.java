@@ -3,6 +3,9 @@ package gomining.test.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import gomining.test.dto.ActivityCreateDto;
+import gomining.test.dto.ActivityUpdateDto;
+import gomining.test.dto.mapper.ActivityMapper;
 import gomining.test.entity.Activity;
 import gomining.test.service.ActivityService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,44 +31,32 @@ public class ActivityController {
     @GetMapping("/{id}")
     public ResponseEntity<Activity>  getActivity(@PathVariable("id") String id) {
 
-            return ResponseEntity.ok(this.activityService.getOne(id));
+        return ResponseEntity.ok(this.activityService.getOne(id));
 
     }
     @GetMapping
     public ResponseEntity<?>  getAllActivities(Pageable pageable) {
-        try{
-            return ResponseEntity.ok(this.activityService.getAll(pageable));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
+        return ResponseEntity.ok(this.activityService.getAll(pageable));
+    
     }
     @PostMapping
-    public ResponseEntity<?> createActivity(@RequestBody Activity activity) {
-        try{
-            return ResponseEntity.status(201).body(this.activityService.createActivity(activity));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e);
-        }
+    public ResponseEntity<Activity> createActivity(@RequestBody ActivityCreateDto activitycCreateDto) {
+   
+        return ResponseEntity.status(201).body(this.activityService.createActivity(ActivityMapper.toActivity(activitycCreateDto)));
+     
     }
     @PutMapping
-    public ResponseEntity<?>  updateActivity(@RequestBody Activity activity) {
-        try{
-            return ResponseEntity.ok(this.activityService.update(activity));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?>  updateActivity(@RequestBody ActivityUpdateDto activityUpdateDto) {
+        
+        return ResponseEntity.ok(this.activityService.update(ActivityMapper.updateToActivity(activityUpdateDto)));
+
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?>  deleteActivity(@PathVariable("id") String id) {
-        try{
-            return ResponseEntity.ok(this.activityService.deleteActivityFromAllStudents(id));
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+  
+        return ResponseEntity.ok(this.activityService.deleteActivityFromAllStudents(id));
+   
     }
 
 }

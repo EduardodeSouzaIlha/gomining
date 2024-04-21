@@ -1,7 +1,5 @@
 package gomining.test.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,11 @@ public class ActivityService {
 
     public Activity update(Activity activity){
         
- 
+        Activity actualActivity = getOne(activity.getId());
+            
+        activity.setCreatedAt(actualActivity.getCreatedAt());
+        activity.setModifiedAt(new Date());
+        
         activity = activityRepository.save(activity);
         return activity; 
     }

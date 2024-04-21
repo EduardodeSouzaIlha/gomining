@@ -2,6 +2,7 @@ package gomining.test.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -20,7 +21,10 @@ public class StudentLoginDto {
     @NotBlank
     @Email(message = "Invalid email format")
     private String email;
+
     @JsonProperty("password")
     @NotBlank
     private String password;
+
+
 }

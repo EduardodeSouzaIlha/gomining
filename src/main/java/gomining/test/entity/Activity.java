@@ -35,4 +35,8 @@ public class Activity {
     private Date createdAt;
     private Date modifiedAt;
 
+    public Activity(String title, String description){
+        this.title = title;
+        this.description = description;
+    }
 }

@@ -1,8 +1,5 @@
 package gomining.test.service;
 
-
-
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,10 +10,8 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,7 +23,6 @@ import gomining.test.entity.Grade;
 import gomining.test.entity.Student;
 import gomining.test.exception.EntityNotFoundException;
 import gomining.test.exception.UniqueViolationException;
-import gomining.test.jwt.JwtUtils;
 import gomining.test.repository.ActivityRepository;
 import gomining.test.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -71,8 +65,8 @@ public class StudentService {
 
     public Student update(Student student){
         Student actualStudent = getOne(student.getId());
-        validationByStudentEmail(actualStudent);
         //verifica se o email do contexto é o mesmo do passado (não permite que outros usuario façam atualização nesse usuario)
+        validationByStudentEmail(actualStudent);
             
             student.setCreatedAt(actualStudent.getCreatedAt());
             student.setModifiedAt(new Date());
