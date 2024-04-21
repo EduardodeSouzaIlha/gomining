@@ -16,20 +16,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentLoginDto {
-    @JsonProperty("name")
-    @NotBlank
-    private String name;
-    @JsonProperty("password")
-    @NotBlank
-    private String password;
-    @JsonProperty("cpf")
-    @NotBlank
-    private String cpf;
-    @JsonProperty("number")
-    @NotBlank
-    private String number;
     @JsonProperty("email")
     @NotBlank
     @Email(message = "Invalid email format")
     private String email;
+    @JsonProperty("password")
+    @NotBlank
+    private String password;
 }

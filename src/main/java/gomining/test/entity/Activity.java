@@ -1,6 +1,12 @@
 package gomining.test.entity;
 
 
+
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.data.annotation.Id;
@@ -25,7 +31,8 @@ public class Activity {
     private String title;
     @NotBlank
     private String description;
-    private String createdAt;
-    private String modifiedAt;
+
+    private Date createdAt;
+    private Date modifiedAt;
 
 }

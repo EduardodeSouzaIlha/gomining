@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gomining.test.dto.StudentCreateDto;
 import gomining.test.dto.StudentResponseDto;
+import gomining.test.dto.StudentUpdateDto;
 import gomining.test.dto.mapper.StudentMapper;
 import gomining.test.entity.Grade;
 import gomining.test.entity.Student;
@@ -38,7 +39,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class StudentController {
 
     private final StudentService studentService;
-    
+
     @GetMapping("{id}")
     public  ResponseEntity<StudentResponseDto> getStudent(@PathVariable("id") String id) {
  
@@ -68,9 +69,9 @@ public class StudentController {
       
     }
     @PutMapping
-    public ResponseEntity<Student> updateStudent(@Valid @RequestBody Student student) {
-   
-            return ResponseEntity.status(HttpStatus.OK).body(this.studentService.update(student));
+    public ResponseEntity<StudentResponseDto> updateStudent(@Valid @RequestBody StudentUpdateDto studentUpdateDto) {
+            Student student = this.studentService.update(StudentMapper.updateToStudent(studentUpdateDto));
+            return ResponseEntity.status(HttpStatus.OK).body(StudentMapper.toDto(student));
    
     }
 

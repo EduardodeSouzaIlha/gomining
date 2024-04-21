@@ -61,7 +61,7 @@ public class ActivityController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?>  deleteActivity(@PathVariable("id") String id) {
         try{
-            return ResponseEntity.ok(this.activityService.deleteById(id));
+            return ResponseEntity.ok(this.activityService.deleteActivityFromAllStudents(id));
         }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
