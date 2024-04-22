@@ -51,7 +51,7 @@ public class StudentServiceTest {
 
     @Test
     public void createStudent() {
-        StudentCreateDto student1 = new StudentCreateDto("Alice", "12345678", "044.342.457.25", "1111111", "alice@example.com");
+        StudentCreateDto student1 = new StudentCreateDto("Alice", "12345678", "044.342.457.25", "51995074472", "alice@example.com");
         Student student = studentService.createStudent(StudentMapper.toStudent(student1));
 
         assertThat(student).isNotNull();

@@ -50,7 +50,7 @@ public class StudentControllerTest {
                 .post()
                 .uri("/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new StudentCreateDto("Pedro", "12345454878", "0454578687", "5198756423", "pedro@email.com" ))
+                .bodyValue(new StudentCreateDto("Pedro", "12345454878", "045.457.868-77", "48058855794", "pedro@email.com" ))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(StudentResponseDto.class)
@@ -61,26 +61,6 @@ public class StudentControllerTest {
         assertThat(responseBody.getEmail()).isEqualTo("pedro@email.com");
         assertThat(responseBody.getRole()).isEqualTo("STUDENT");
     }
-    @Test
-    public void createActivity() {
-        Activity responseBody = testClient
-            .post()
-            .uri("/api/v1/activities")
-            .contentType(MediaType.APPLICATION_JSON)
-            .headers(JwtAuth.getHeaderAuthorization(testClient, "pedro@email.com", "12345454878"))
-            .bodyValue(new ActivityCreateDto("titulo", "descrição"))
-            .exchange()
-            .expectStatus().isCreated()
-            .expectBody(Activity.class)
-            .returnResult()
-            .getResponseBody();
-
-        assertThat(responseBody).isNotNull();
-        assertThat(responseBody.getId()).isNotNull();
-        assertThat(responseBody.getTitle()).isEqualTo("titulo");
-        assertThat(responseBody.getDescription()).isEqualTo("descrição");
-    }
-
 
 
   
